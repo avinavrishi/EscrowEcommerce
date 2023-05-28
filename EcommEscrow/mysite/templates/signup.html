@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block signup %}
+ <style>
+    body {
+      background-color: #f2f2f2;
+    }
+
+    .signup-container {
+      max-width: 400px;
+      margin: 0 auto;
+      margin-top: 100px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .signup-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .signup-container .form-group {
+      margin-bottom: 20px;
+    }
+
+    .signup-container label {
+      font-weight: bold;
+    }
+
+    .signup-container input[type="text"],
+    .signup-container input[type="password"],
+    .signup-container input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .signup-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .signup-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+
+
+<div class="container">
+  <div class="signup-container">
+    <h2>Signup</h2>
+    <form method="post">
+      {% csrf_token %}
+
+      {{ form.username.label}}
+      {{ form.username}}<br>
+
+      {{ form.email.label}}
+      {{ form.email}}<br>
+
+      {{form.password1.label}}
+      {{form.password1}}<br>
+
+      {{form.password2.label}}
+      {{form.password2}}
+      <br>
+
+
+      <button type="submit">Signup</button>
+    </form>
+
+    {{form.errors}}
+
+    <div class="signup-text">
+      Already have an account? <a href="{% url 'login' %}">Sign up</a>
+    </div>
+  </div>
+</div>
+
+  {% endblock %}
