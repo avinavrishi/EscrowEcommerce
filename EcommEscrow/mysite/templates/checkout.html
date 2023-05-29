@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block checkout %}
+
+<style type="text/css">
+  /* Set global styles */
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+/* Styles for the address form */
+.address-form {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/* Styles for the order summary */
+.order-summary {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.order-summary table {
+  width: 100%;
+}
+
+.order-summary th, .order-summary td {
+  padding: 10px;
+  text-align: left;
+}
+
+.order-summary th {
+  font-weight: bold;
+}
+
+.order-summary tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.order-summary tfoot td {
+  font-weight: bold;
+}
+
+/* Styles for the place order button */
+.place-order-form {
+  text-align: center;
+}
+
+.place-order-form button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+/* Styles for the overall layout */
+.row {
+  display: flex;
+}
+
+.col-md-6 {
+  flex-basis: 50%;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .col-md-6 {
+    flex-basis: 100%;
+  }
+}
+
+</style>
+<h1>Checkout</h1>
+<div class="row">
+  <div class="col-md-6">
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="email" id="email" placeholder="Email" required>
+      <button type="submit" class="btn btn-primary">Proceed</button>
+    </form>
+  </div>
+
+  <div class="col-md-6">
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_products %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+              <input type="number" name="quantity" value="1" class="form-control quantity-input" data-price="{{ item.price }}">
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p>Total Price: <span id="total-price">{{ total_price }}</span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Calculate total price based on quantity
+  function calculateTotalPrice() {
+    var totalPrice = 0;
+    var quantityInputs = document.getElementsByClassName('quantity-input');
+    var totalElement = document.getElementById('total-price');
+
+    for (var i = 0; i < quantityInputs.length; i++) {
+      var quantityInput = quantityInputs[i];
+      var price = parseInt(quantityInput.dataset.price);
+      var quantity = parseInt(quantityInput.value);
+      var total = price * quantity;
+      totalPrice += total;
+    }
+
+    totalElement.innerText = totalPrice.toFixed(2);
+  }
+
+  // Event listener for quantity change
+  var quantityInputs = document.getElementsByClassName('quantity-input');
+  for (var i = 0; i < quantityInputs.length; i++) {
+    quantityInputs[i].addEventListener('change', calculateTotalPrice);
+  }
+
+  // Calculate total price on page load
+  calculateTotalPrice();
+</script>
+
+
+{% endblock %}
+
+
+<!-- We need to add Firstname, LastName, email, phonenumber -->

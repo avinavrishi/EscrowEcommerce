@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block wallet %}
+  <h1>Wallet</h1>
+  <p>Balance: ${{ balance }}</p>
+
+  <h2>Add Balance</h2>
+  <form method="post" action="{% url 'add_balance' %}">
+    {% csrf_token %}
+    <input type="number" name="amount" step="0.01" min="0" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <h2>Withdraw Balance</h2>
+  <form method="post" action="{% url 'withdraw_balance' %}">
+    {% csrf_token %}
+    <input type="number" name="amount" step="0.01" min="0" required>
+    <button type="submit">Withdraw</button>
+  </form>
+
+
+
+  <h1>Deposit History</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Transaction ID</th>
+        <th>Payment Currency</th>
+        <th>Deposit Amount</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for deposit in deposits %}
+        <tr>
+          <td>{{ deposit.transaction_id }}</td>
+          <td>{{ deposit.payment_currency }}</td>
+          <td>{{ deposit.deposit_amount }}</td>
+          <td>{{ deposit.status }}</td>
+          <td>{{ deposit.created_at }}</td>
+          <td>{{ deposit.updated_at }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No deposit records found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Withdrawal History</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Withdraw Amount</th>
+        <th>Payment Method</th>
+        <th>Wallet Address</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for withdrawal in withdrawals %}
+        <tr>
+          <td>{{ withdrawal.withdraw_amount }}</td>
+          <td>{{ withdrawal.payment_method }}</td>
+          <td>{{ withdrawal.wallet_address }}</td>
+          <td>{{ withdrawal.status }}</td>
+          <td>{{ withdrawal.created_at }}</td>
+          <td>{{ withdrawal.updated_at }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No withdrawal records found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -2,36 +2,28 @@
 {% load static %}
 {% block homepage %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">MyApp</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      {% if user.is_authenticated %}
-      
-        <li class="nav-item">
-          <a class="nav-link" href="#">{{ user.username }}</a>
-        </li>
-        <li class="nav-item">
-          <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-link nav-link" type="submit">Logout</button>
-          </form>
-        </li>
-      {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
-</nav>
 
-<h1>Homepage</h1>
+
+	<div class="container">
+  <h2>All Product List</h2>
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=799&q=80" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="card-price">Price: ${{ product.price }}</p>
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Buy</a>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No products available</p>
+    {% endfor %}
+  </div>
+</div>
 
 {% endblock %}

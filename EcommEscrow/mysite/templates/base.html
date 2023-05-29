@@ -7,21 +7,151 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <title>Login Page</title>
 </head>
+<style type="text/css">
+  .footer {
+  background-color: #f8f8f8;
+  padding: 20px 0;
+  margin-top: 50px;
+}
 
+.footer h4 {
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.footer p {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.footer-links li {
+  margin-bottom: 5px;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+</style>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'home' %}">MyApp</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      {% if user.is_authenticated %}
+      
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_product' %}">Add product</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="{% url 'user_product_list' %}">My products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'order_history' %}">My orders</a>
+        </li>
 
+         <li class="nav-item">
+          <a class="nav-link" href="{% url 'wallet' %}">Wallet {{user.profile.walletBalance}}$ </a>
+        </li>
+
+        
+        <li class="nav-item">
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-link nav-link" type="submit">Logout</button>
+          </form>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
   {% block login %}
-
   {% endblock %}
 
   {% block signup %}
-
   {% endblock %}
   
   {% block homepage %}
+  {% endblock %}
 
+   {% block profile %}
   {% endblock %}
   
+  {% block product_detail %}
+  {% endblock %}
+
+  {% block cart %}
+  {% endblock %}
+
+  {% block checkout %}
+  {% endblock %}
+
+  {% block orderConfirm %}
+  {% endblock %}
+
+  {% block add_product %}
+  {% endblock %}
+
+
+  {% block my_product_list %}
+  {% endblock %}
+
+  {% block wallet %}
+  {% endblock %}
+
+  {% block order_history %}
+  {% endblock %}
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h4>About Us</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+      <div class="col-md-3">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Products</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h4>Contact Us</h4>
+        <p>123 Street, City</p>
+        <p>Email: info@example.com</p>
+        <p>Phone: 123-456-7890</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

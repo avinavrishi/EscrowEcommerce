@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block cart %}
+  <div class="container">
+    <h1>Cart</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cart_item in cart_items %}
+          <tr>
+            <td>{{ cart_item.product.name }}</td>
+            <td>{{ cart_item.product.price }}</td>
+            <td>
+              <form class="quantity-form">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ cart_item.product.id }}">
+                <input type="number" name="quantity" value="{{ cart_item.quantity }}" class="form-control quantity-input" min="1" step="1">
+                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+              </form>
+            </td>
+            <td class="item-total">{{ cart_item.product.price|floatformat:2 }}</td>
+            <td>
+              <a href="{% url 'remove_from_cart' cart_item.product.id %}" class="btn btn-sm btn-danger">Remove</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">No items in the cart</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>Total Price: <span id="total-price">{{ total_price|floatformat:2 }}</span></p>
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+  </div>
+
+  <script>
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const itemTotalElements = document.querySelectorAll('.item-total');
+    const totalPriceElement = document.getElementById('total-price');
+
+    quantityInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        const quantity = parseInt(input.value);
+        const itemPrice = parseFloat(itemTotalElements[index].textContent);
+        const itemTotal = quantity * itemPrice;
+        itemTotalElements[index].textContent = itemTotal.toFixed(2);
+
+        let total = 0;
+        itemTotalElements.forEach((element) => {
+          total += parseFloat(element.textContent);
+        });
+        totalPriceElement.textContent = total.toFixed(2);
+      });
+    });
+  </script>
+{% endblock %}

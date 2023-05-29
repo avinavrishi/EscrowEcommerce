@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block order_history %}
+  <h1>Order History</h1>
+  {% if orders %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Date</th>
+          <th>Products</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at }}</td>
+            <td>
+              <ul>
+                {% for product in order.products.all %}
+                  <li>{{ product.name }}</li>
+                {% endfor %}
+              </ul>
+            </td>
+            <td>{{ order.total_price }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+              {% if order.status == 'pending' %}
+                <form method="post" action="{% url 'approve_order' order.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Approve</button>
+                </form>
+              {% else %}
+                <button class="btn btn-success" disabled>Approved</button>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No orders found.</p>
+  {% endif %}
+{% endblock %}

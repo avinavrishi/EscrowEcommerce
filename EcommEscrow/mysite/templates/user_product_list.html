@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block my_product_list %}
+  <h1>My Products</h1>
+  {% if products %}
+    <ul>
+      {% for product in products %}
+        <li>{{ product.name }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No products available.</p>
+  {% endif %}
+{% endblock %}
